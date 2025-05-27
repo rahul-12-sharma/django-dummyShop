@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Your Cart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+
+  <!-- Navigation Bar -->
+  <nav class="bg-white shadow mb-6">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="{% url 'product_list' %}" class="text-xl font-bold text-gray-800">DummyShop</a>
+      <a href="{% url 'view_cart' %}" class="text-blue-600 hover:underline">
+        🛒 Cart ({{ request.session.cart|length|default:0 }})
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Cart Container -->
+  <div class="container mx-auto px-4 py-10">
+    <h1 class="text-3xl font-bold mb-6">Your Cart</h1>
+
+    {% if cart %}
+    <div class="bg-white p-6 rounded-lg shadow">
+      {% for id, item in cart.items %}
+      <div class="flex items-center mb-4 border-b pb-4">
+        <img src="{{ item.thumbnail }}" alt="{{ item.title }}" class="w-20 h-20 object-cover rounded mr-4">
+        <div class="flex-1">
+          <h2 class="text-xl font-semibold">{{ item.title }}</h2>
+          <p class="text-gray-600">${{ item.price }} × {{ item.quantity }}</p>
+        </div>
+        <a href="{% url 'remove_from_cart' id %}" class="text-red-600 hover:underline">Remove</a>
+      </div>
+      {% endfor %}
+      
+      {% if cart %}
+      <!-- Cart Items Here -->
+      <div class="mt-4 text-right">
+        <p class="text-sm text-gray-500">Items in cart: {{ cart|length }}</p>
+        <p class="text-2xl font-bold">Total: ${{ total|default:0 }}</p>
+      </div>
+      {% endif %}
+
+    </div>
+    {% else %}
+    <p class="text-center text-lg text-gray-500 bg-white p-6 rounded-lg shadow">
+      🛒 Your cart is empty.
+    </p>
+    {% endif %}
+
+    <div class="mt-6">
+      <a href="{% url 'product_list' %}" class="text-blue-600 hover:underline">← Continue Shopping</a>
+    </div>
+  </div>
+
+</body>
+
+</html>
